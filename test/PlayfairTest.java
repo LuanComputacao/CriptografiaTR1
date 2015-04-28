@@ -2,6 +2,8 @@ import com.luancomputacao.cifras.Playfair;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -10,24 +12,43 @@ import static org.junit.Assert.assertEquals;
 public class PlayfairTest {
 
     private Playfair playfair;
+    private String keyworkd = "Monarchy";
+    private String textoClaro = "Luannb";
+    char[][] matrizmodel = {
+            {'m', 'o', 'n', 'a', 'r'},
+            {'c', 'h', 'y', 'b', 'd'},
+            {'e', 'f', 'g', 'i', 'k'},
+            {'l', 'p', 'q', 's', 't'},
+            {'u', 'v', 'w', 'x', 'z'}
+    };
+    private char[][] matrizMaked;
+
 
     @Before
     public void inicializa() {
-        this.playfair= new Playfair("Monarchy", "Luan");
+        this.playfair = new Playfair(keyworkd, textoClaro);
     }
 
     @Test
-    public void RetornaMatriz(){
+    public void RetornaMatriz() {
+        this.matrizMaked = this.playfair.getMatriz();
+//        this.imprimeMatrizMaked();
+        assertEquals(this.matrizmodel, this.matrizMaked);
+    }
 
-        char[][] matrizmodel = {
-                {'m', 'o', 'n', 'a', 'r'},
-                {'c', 'h', 'y', 'b', 'd'},
-                {'e', 'f', 'g', 'i', 'k'},
-                {'l', 'p', 'q', 's', 't'},
-                {'u', 'v', 'w', 'x', 'z'}
-        };
+    public void imprimeMatrizMaked() {
+        for (char[] aMatrizMaked : this.matrizMaked) {
+            for (int j = 0; j < aMatrizMaked.length; j++) {
+                System.out.print(aMatrizMaked[j]);
+            }
+            System.out.println("");
+        }
+    }
 
-        assertEquals(matrizmodel, this.playfair.getMatriz());
+
+    @Test
+    public void deveRetornarTextoPreparado(){
+
     }
 
 }
