@@ -2,8 +2,6 @@ import com.luancomputacao.cifras.Playfair;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -13,7 +11,8 @@ public class PlayfairTest {
 
     private Playfair playfair;
     private String keyworkd = "Monarchy";
-    private String textoClaro = "Luannb";
+    private String textoClaro = "Luan nnb";
+    private String textoPreparado = "luannxnb";
     char[][] matrizmodel = {
             {'m', 'o', 'n', 'a', 'r'},
             {'c', 'h', 'y', 'b', 'd'},
@@ -45,10 +44,8 @@ public class PlayfairTest {
         }
     }
 
-
     @Test
     public void deveRetornarTextoPreparado(){
-
+        assertEquals(this.textoPreparado, this.playfair.getStrTextoPreparado());
     }
-
 }
