@@ -33,6 +33,7 @@ public class PlayfairTest {
     @Before
     public void inicializa() {
         this.playfair = new Playfair(keyworkd, textoClaro);
+        this.playfair.cifrarTexto();
     }
 
     // First Element

@@ -1,13 +1,10 @@
 package com.luancomputacao.cifras;
 
-import com.sun.deploy.util.ArrayUtil;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
  * Created by luan on 27/04/15.
- * <p>
+ * <p/>
  * This class is to cipher a text with Playfair method
  */
 public class Playfair {
@@ -20,6 +17,7 @@ public class Playfair {
     private String strTextoPreparado = null;
     private Character x = 'x';
     private List<Character> lstTextoPreparado = new ArrayList<>();
+    private List<Character> lstTextoCifrado = new ArrayList<>();
     private String textoCifrado;
 
 
@@ -27,12 +25,8 @@ public class Playfair {
     | Cosntructor
     ------------------------------------------------------------------------------------------------------------------*/
     public Playfair(String keyword, String textoClaro) {
-        this.keyword = keyword.toLowerCase().replace("\\s+", "");
+        this.setKeyword(keyword);
         this.textoClaro = textoClaro;
-        this.montaMatriz();
-        this.preparaTextoClaro();
-        this.setCharMap();
-        this.cifrarTexto();
     }
 
     /*------------------------------------------------------------------------------------------------------------------
@@ -44,7 +38,7 @@ public class Playfair {
     }
 
     public void setKeyword(String keyword) {
-        this.keyword = keyword;
+        this.keyword = keyword.toLowerCase().replace("\\s+", "");
     }
 
     public String getTextoClaro() {
@@ -72,7 +66,11 @@ public class Playfair {
     }
 
     private void setStrTextoPreparado() {
-        this.strTextoPreparado = lstTextoPreparado.toString().replaceAll("[\\n, \\[\\]]", "");
+        this.strTextoPreparado = this.lstTextoPreparado.toString().replaceAll("[\\n, \\[\\]]", "");
+    }
+
+    private void setStrTextoCifrado() {
+        this.strTextoPreparado = this.lstTextoCifrado.toString().replaceAll("[\\n, \\[\\]]", "");
     }
 
     public List<Character> getLstTextoPreparado() {
@@ -88,7 +86,13 @@ public class Playfair {
         return this.strTextoPreparado;
     }
 
+    public String getStrTextoCifrado() {
+        this.setStrTextoCifrado();
+        return this.strTextoPreparado;
+    }
+
     public String getTextoCifrado() {
+        this.textoCifrado = this.getStrTextoCifrado();
         return textoCifrado;
     }
 
@@ -113,7 +117,7 @@ public class Playfair {
     | Metodos
     ------------------------------------------------------------------------------------------------------------------*/
 
-    private void montaMatriz() {
+    private void setMatriz() {
         char[] arrKeyword = this.keyword.toCharArray();
         ArrayList<Character> lstKeyword = new ArrayList<>();
 
@@ -153,14 +157,18 @@ public class Playfair {
         this.strTextoPreparado = strTemp;
     }
 
-    private void cifrarTexto() {
-        int newLine1;
-        int newCol1;
+    public void cifrarTexto() {
+        this.preparaTextoClaro();
+        this.setMatriz();
+        this.setCharMap();
+        this.embaralhaCaracteres();
+    }
 
-        int newLine2;
-        int newCol2;
+    private void embaralhaCaracteres() {
+        int temp;
 
         for (int i = 0; i < this.lstTextoPreparado.size(); i += 2) {
+
             String letra1 = this.lstTextoPreparado.get(i).toString();
             int line1 = getLinePlayfair(letra1);
             int col1 = getColPlayfair(letra1);
@@ -170,13 +178,18 @@ public class Playfair {
             int col2 = getColPlayfair(letra2);
 
             if (line1 == line2) {
-                newLine1 = line1++ % 5;
-                newLine2 = line2++ % 5;
+                col1 = ++col1 % 5;
+                col2 = ++col2 % 5;
+            } else if (col1 == col2) {
+                line1 = ++line1 % 5;
+                line2 = ++line2 % 5;
+            } else {
+                temp = col1;
+                col1 = col2;
+                col2 = temp;
             }
-            if (line1 == line2) {
-                newCol1 = col1++ % 5;
-                newCol2 = col2++ % 5;
-            }
+            this.lstTextoCifrado.add(this.matriz[line1][col1]);
+            this.lstTextoCifrado.add(this.matriz[line2][col2]);
         }
         this.textoCifrado = this.getStrTextoPreparado();
     }
