@@ -2,6 +2,9 @@ import com.luancomputacao.cifras.Playfair;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -13,11 +16,10 @@ public class PlayfairTest {
 
     private Playfair playfair;
     private String keyworkd = "Monarchy";
-    private String textoClaro = "Luan nnb";
-    private String textoPreparado = "luannxnb";
-    private Playfair playfair2;
-    private String textoClaro2 = "balloon";
-    private String textoPreparado2 = "balxloon";
+    private String textoClaro = "Noab ijbni";
+    private String textoPreparado = "noabixibni";
+    private String textoCifrado = "anbisasiag";
+
     private char[][] matrizmodel = {
             {'m', 'o', 'n', 'a', 'r'},
             {'c', 'h', 'y', 'b', 'd'},
@@ -31,13 +33,14 @@ public class PlayfairTest {
     @Before
     public void inicializa() {
         this.playfair = new Playfair(keyworkd, textoClaro);
-        this.playfair2 = new Playfair(keyworkd, textoClaro2);
     }
 
+    // First Element
     @Test
     public void RetornaMatriz() {
         this.matrizMaked = this.playfair.getMatriz();
 //        this.imprimeMatrizMaked();
+        //noinspection deprecation
         assertEquals(this.matrizmodel, this.matrizMaked);
     }
 
@@ -56,7 +59,7 @@ public class PlayfairTest {
     }
 
     @Test
-    public void deveRetornarTextoPreparado2() {
-        assertEquals(this.textoPreparado2, this.playfair2.getStrTextoPreparado());
+    public void deveRetornarTextoCifrado() {
+        assertEquals(this.textoCifrado, this.playfair.getTextoCifrado());
     }
 }
