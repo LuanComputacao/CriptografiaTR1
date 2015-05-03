@@ -13,9 +13,9 @@ public class PlayfairTest {
 
     private Playfair playfair;
     private String keyworkd = "Monarchy";
-    private String textoClaro = "Noãb ijbní.";
-    private String textoPreparado = "noabixibni";
-    private String textoCifrado = "anbisasiag";
+    private String textoClaro = "Noãb ijbnín.";
+    private String textoPreparado = "noabixibninx";
+    private String textoCifrado = "anbisasiagaw";
 
     private char[][] matrizmodel = {
             {'m', 'o', 'n', 'a', 'r'},
@@ -25,6 +25,8 @@ public class PlayfairTest {
             {'u', 'v', 'w', 'x', 'z'}
     };
     private char[][] matrizMaked;
+    private String inputFileName = "files/smallinput.in";
+    private String outputFileName;
 
 
     @Before
@@ -62,7 +64,12 @@ public class PlayfairTest {
     }
 
     @Test
-    public void deveRetornarTextoCifradoPorCifrarTexto() {
+    public void deveCifrarNovoTexto() {
         assertEquals(this.textoCifrado, this.playfair.cifrarTexto(this.textoClaro));
+    }
+
+    @Test
+    public void cifraUmArquivoDeTexto() {
+        this.playfair.cifraArquivoDeTexto(inputFileName, outputFileName);
     }
 }

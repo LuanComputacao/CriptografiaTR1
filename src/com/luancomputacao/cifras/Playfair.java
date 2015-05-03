@@ -20,6 +20,7 @@ public class Playfair {
     private List<Character> lstTextoPreparado = new ArrayList<>();
     private List<Character> lstTextoCifrado = new ArrayList<>();
     private String strTextoCifrado;
+    private boolean stream;
 
 
     /*------------------------------------------------------------------------------------------------------------------
@@ -53,6 +54,9 @@ public class Playfair {
 
     private void setTextoPreparado() {
         String strTemp = this.clearText(this.getTextoClaro());
+        if (!stream) if ((strTemp.length() % 2) == 0) {
+            strTemp += "x";
+        }
         this.separeteDoubleChar(strTemp);
     }
 
@@ -208,5 +212,9 @@ public class Playfair {
             this.lstTextoCifrado.add(this.matriz[line1][col1]);
             this.lstTextoCifrado.add(this.matriz[line2][col2]);
         }
+    }
+
+    public void cifraArquivoDeTexto(String inputFileName, String outputFileName) {
+
     }
 }
