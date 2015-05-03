@@ -106,14 +106,6 @@ public class Playfair {
         this.strTextoCifrado = this.lstTextoCifrado.toString().replaceAll("[\\n, \\[\\]]", "");
     }
 
-    public List<Character> getLstTextoPreparado() {
-        return lstTextoPreparado;
-    }
-
-    public void setLstTextoPreparado(List<Character> lstTextoPreparado) {
-        this.lstTextoPreparado = lstTextoPreparado;
-    }
-
     public String getTextoPreparado() {
         this.setStrTextoPreparado();
         return this.strTextoPreparado;
@@ -138,12 +130,6 @@ public class Playfair {
     private int getColPlayfair(String letter) {
         return charMap.get(letter)[1];
     }
-
-    private String getLetterCharMap(int[] position) {
-        return Arrays.toString(this.charMap.get(position));
-    }
-
-
 
     /*------------------------------------------------------------------------------------------------------------------
     | Metodos
