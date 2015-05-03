@@ -1,7 +1,6 @@
 package com.luancomputacao.cifras;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,7 +17,6 @@ public class Playfair {
     private char alfabeto[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
     private String strTextoPreparado = null;
-    private Character x = 'x';
     private List<Character> lstTextoPreparado = new ArrayList<>();
     private List<Character> lstTextoCifrado = new ArrayList<>();
     private String strTextoCifrado;
@@ -49,7 +47,7 @@ public class Playfair {
         return textoClaro;
     }
 
-    public void setTextoClaro(String textoClaro) {
+    void setTextoClaro(String textoClaro) {
         this.textoClaro = textoClaro;
     }
 
@@ -174,7 +172,7 @@ public class Playfair {
         for (int i = 0; i < strTemp.length() - 1; i += 2) {
             if (strTemp.charAt(i) == strTemp.charAt(i + 1)) {
                 this.lstTextoPreparado.add(strTemp.charAt(i));
-                this.lstTextoPreparado.add(x);
+                this.lstTextoPreparado.add('x');
                 i--;
             } else {
                 this.lstTextoPreparado.add(strTemp.charAt(i));
