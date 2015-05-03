@@ -1,6 +1,9 @@
 package com.luancomputacao.cifras;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by luan on 27/04/15.
@@ -18,7 +21,7 @@ public class Playfair {
     private Character x = 'x';
     private List<Character> lstTextoPreparado = new ArrayList<>();
     private List<Character> lstTextoCifrado = new ArrayList<>();
-    private String textoCifrado;
+    private String strTextoCifrado;
 
 
     /*------------------------------------------------------------------------------------------------------------------
@@ -26,7 +29,7 @@ public class Playfair {
     ------------------------------------------------------------------------------------------------------------------*/
     public Playfair(String keyword, String textoClaro) {
         this.setKeyword(keyword);
-        this.textoClaro = textoClaro;
+        this.setTextoClaro(textoClaro);
     }
 
     /*------------------------------------------------------------------------------------------------------------------
@@ -39,6 +42,7 @@ public class Playfair {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword.toLowerCase().replace("\\s+", "");
+        this.setMatriz();
     }
 
     public String getTextoClaro() {
@@ -49,8 +53,37 @@ public class Playfair {
         this.textoClaro = textoClaro;
     }
 
+    private void setTextoPreparado() {
+        String strTemp = this.clearText(this.getTextoClaro());
+        this.separeteDoubleChar(strTemp);
+    }
+
     public char[][] getMatriz() {
         return this.matriz;
+    }
+
+    private void setMatriz() {
+        char[] arrKeyword = this.keyword.toCharArray();
+        ArrayList<Character> lstKeyword = new ArrayList<>();
+
+        for (char anArrKeyword : arrKeyword) {
+            if (!lstKeyword.contains(anArrKeyword)) {
+                lstKeyword.add(anArrKeyword);
+            }
+        }
+
+        for (char anAlfabeto : alfabeto) {
+            if (!lstKeyword.contains(anAlfabeto)) {
+                lstKeyword.add(anAlfabeto);
+            }
+        }
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                this.matriz[i][j] = lstKeyword.get(i * 5 + j);
+            }
+        }
+        this.setCharMap();
     }
 
     private void setCharMap() {
@@ -70,7 +103,7 @@ public class Playfair {
     }
 
     private void setStrTextoCifrado() {
-        this.strTextoPreparado = this.lstTextoCifrado.toString().replaceAll("[\\n, \\[\\]]", "");
+        this.strTextoCifrado = this.lstTextoCifrado.toString().replaceAll("[\\n, \\[\\]]", "");
     }
 
     public List<Character> getLstTextoPreparado() {
@@ -81,19 +114,18 @@ public class Playfair {
         this.lstTextoPreparado = lstTextoPreparado;
     }
 
-    public String getStrTextoPreparado() {
+    public String getTextoPreparado() {
         this.setStrTextoPreparado();
         return this.strTextoPreparado;
     }
 
-    public String getStrTextoCifrado() {
+    public String getTextoCifrado() {
         this.setStrTextoCifrado();
-        return this.strTextoPreparado;
+        return this.strTextoCifrado;
     }
 
-    public String getTextoCifrado() {
-        this.textoCifrado = this.getStrTextoCifrado();
-        return textoCifrado;
+    public List<Character> getLstTextoCifrado() {
+        return this.lstTextoCifrado;
     }
 
     /*------------------------------------------------------------------------------------------------------------------
@@ -117,51 +149,52 @@ public class Playfair {
     | Metodos
     ------------------------------------------------------------------------------------------------------------------*/
 
-    private void setMatriz() {
-        char[] arrKeyword = this.keyword.toCharArray();
-        ArrayList<Character> lstKeyword = new ArrayList<>();
-
-        for (char anArrKeyword : arrKeyword) {
-            if (!lstKeyword.contains(anArrKeyword)) {
-                lstKeyword.add(anArrKeyword);
-            }
-        }
-
-        for (char anAlfabeto : alfabeto) {
-            if (!lstKeyword.contains(anAlfabeto)) {
-                lstKeyword.add(anAlfabeto);
-            }
-        }
-
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                this.matriz[i][j] = lstKeyword.get(i * 5 + j);
-            }
-        }
+    public void cifrarTexto() {
+        this.setTextoPreparado();
+        this.embaralhaCaracteres();
     }
 
-    private void preparaTextoClaro() {
-        String strTemp = this.textoClaro.toLowerCase().replaceAll("\\s", "");
-        strTemp = strTemp.replaceAll("j", "i");
+    private void resetLsts() {
+        this.lstTextoCifrado = new ArrayList<>();
+        this.lstTextoPreparado = new ArrayList<>();
+    }
 
+    public String cifrarTexto(String textoClaro) {
+        this.resetLsts();
+        this.setTextoClaro(textoClaro);
+        this.setTextoPreparado();
+        this.embaralhaCaracteres();
+        return this.getTextoCifrado();
+    }
+
+    private String clearText(String sClearText) {
+        sClearText = sClearText.toLowerCase();
+        sClearText = sClearText.replaceAll("\\s", "");
+        sClearText = sClearText.replaceAll("[àÀáÁâÂãÃäÄÅå]", "a");
+        sClearText = sClearText.replaceAll("[èÈéÉêÊëË]", "e");
+        sClearText = sClearText.replaceAll("[ìÌíÍîÎïÏ]", "i");
+        sClearText = sClearText.replaceAll("[òÒóÓôÔõÕöÖ]", "o");
+        sClearText = sClearText.replaceAll("[ùÙÚúûÛüÜ]", "u");
+        sClearText = sClearText.replaceAll("[çÇ]", "c");
+        sClearText = sClearText.replaceAll("[ñÑ]", "n");
+        sClearText = sClearText.replaceAll("[ýÝÿŸ]", "y");
+        sClearText = sClearText.replaceAll("[ßØøÆæœ]", "x");
+        sClearText = sClearText.replaceAll("j", "i");
+        sClearText = sClearText.replaceAll("\\W", "");
+        return sClearText;
+    }
+
+    private void separeteDoubleChar(String strTemp) {
         for (int i = 0; i < strTemp.length() - 1; i += 2) {
             if (strTemp.charAt(i) == strTemp.charAt(i + 1)) {
-                lstTextoPreparado.add(strTemp.charAt(i));
-                lstTextoPreparado.add(x);
+                this.lstTextoPreparado.add(strTemp.charAt(i));
+                this.lstTextoPreparado.add(x);
                 i--;
             } else {
-                lstTextoPreparado.add(strTemp.charAt(i));
-                lstTextoPreparado.add(strTemp.charAt(i + 1));
+                this.lstTextoPreparado.add(strTemp.charAt(i));
+                this.lstTextoPreparado.add(strTemp.charAt(i + 1));
             }
         }
-        this.strTextoPreparado = strTemp;
-    }
-
-    public void cifrarTexto() {
-        this.preparaTextoClaro();
-        this.setMatriz();
-        this.setCharMap();
-        this.embaralhaCaracteres();
     }
 
     private void embaralhaCaracteres() {
@@ -191,6 +224,5 @@ public class Playfair {
             this.lstTextoCifrado.add(this.matriz[line1][col1]);
             this.lstTextoCifrado.add(this.matriz[line2][col2]);
         }
-        this.textoCifrado = this.getStrTextoPreparado();
     }
 }

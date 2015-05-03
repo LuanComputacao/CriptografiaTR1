@@ -2,9 +2,6 @@ import com.luancomputacao.cifras.Playfair;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -16,7 +13,7 @@ public class PlayfairTest {
 
     private Playfair playfair;
     private String keyworkd = "Monarchy";
-    private String textoClaro = "Noab ijbni";
+    private String textoClaro = "Noãb ijbní.";
     private String textoPreparado = "noabixibni";
     private String textoCifrado = "anbisasiag";
 
@@ -56,11 +53,16 @@ public class PlayfairTest {
 
     @Test
     public void deveRetornarTextoPreparado1() {
-        assertEquals(this.textoPreparado, this.playfair.getStrTextoPreparado());
+        assertEquals(this.textoPreparado, this.playfair.getTextoPreparado());
     }
 
     @Test
     public void deveRetornarTextoCifrado() {
         assertEquals(this.textoCifrado, this.playfair.getTextoCifrado());
+    }
+
+    @Test
+    public void deveRetornarTextoCifradoPorCifrarTexto() {
+        assertEquals(this.textoCifrado, this.playfair.cifrarTexto(this.textoClaro));
     }
 }
