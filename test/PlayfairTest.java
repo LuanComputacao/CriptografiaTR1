@@ -25,8 +25,10 @@ public class PlayfairTest {
             {'u', 'v', 'w', 'x', 'z'}
     };
     private char[][] matrizMaked;
+
     private String inputFileName = "files/smallinput.in";
-    private String outputFileName;
+    private String outputFileName = "files/smallout.out";
+    private String testoutputFileName = "files/testsmallout.out";
 
 
     @Before
