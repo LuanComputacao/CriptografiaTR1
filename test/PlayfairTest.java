@@ -25,7 +25,7 @@ public class PlayfairTest {
             {'u', 'v', 'w', 'x', 'z'}
     };
     private char[][] matrizMaked;
-    private String pathFiles = "/var/workspace/Mestrado/Criptografia/tr1/test/files/";
+    private String pathFiles = System.getProperty("user.dir")+ "/test/files/";
     private String inputFileName = pathFiles + "smallinput.in";
     private String outputFileName = pathFiles + "smallout.out";
     private String testoutputFileName = "files/testsmallout.out";
@@ -72,7 +72,6 @@ public class PlayfairTest {
 
     @Test
     public void cifraUmArquivoDeTexto() {
-
         this.playfair.cifraArquivoDeTexto(inputFileName, outputFileName);
     }
 }

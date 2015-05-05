@@ -1,8 +1,6 @@
 package com.luancomputacao.cifras;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -15,7 +13,7 @@ import java.util.Scanner;
 
 /**
  * Created by luan on 27/04/15.
- * <p/>
+ * <p>
  * This class is to cipher a text with Playfair method
  */
 public class Playfair {
@@ -32,6 +30,7 @@ public class Playfair {
     private boolean stream;
 
     final static Charset ENCODING = StandardCharsets.UTF_8;
+    private long numOfChars = 0;
 
 
     /*------------------------------------------------------------------------------------------------------------------
@@ -226,8 +225,11 @@ public class Playfair {
     }
 
     public void cifraArquivoDeTexto(String inputFileName, String outputFileName) {
+        String outTempFile = System.getProperty("java.io.tmpdir")+"/tmpPlayFairout.out";
+
         Path path = Paths.get(inputFileName);
-        Path pathWriteTemp = Paths.get(outputFileName);
+        Path pathWriteTemp = Paths.get(outTempFile);
+        Path pathWriteCipher = Paths.get(outputFileName);
         String text;
 
 
@@ -235,14 +237,59 @@ public class Playfair {
             BufferedWriter writer = Files.newBufferedWriter(pathWriteTemp, ENCODING);
             Scanner scanner = new Scanner(path, ENCODING.name());
 
+            //Faz a leitura das linhas, limpa o texto e grava em arquivo temporário
             while (scanner.hasNextLine()) {
-                text = scanner.nextLine();
-                System.out.println(text);
-                text = clearText(text);
-                System.out.println(text);
+                text = clearText(scanner.nextLine());
+                //System.out.print(text);
                 writer.write(text);
             }
             writer.close();
+
+            //Faz a leitura do arquivo temporário para separar os caracters iguais
+            FileInputStream fileInputStream = new FileInputStream(pathWriteTemp.toString());
+            int r;
+            char[] digraph = new char[2];
+            digraph[0] = ' ';
+            int numOfChars = 0;
+            char tempC;
+
+            BufferedWriter writeCipher = Files.newBufferedWriter(pathWriteCipher, ENCODING);
+            while ((r = fileInputStream.read()) != -1) {
+                char c = (char) r;
+                if ((numOfChars % 2 == 0) && (digraph[0] == ' ')) {
+                    digraph[0] = c;
+                } else {
+                    digraph[1] = c;
+                    System.out.print(digraph[0]);
+                    System.out.print(digraph[1]);
+
+                    if (digraph[0] == digraph[1]) {
+                        System.out.print(" eq");
+
+                        tempC = digraph[1];
+                        digraph[1] = 'x';
+                        digraph[0] = tempC;
+                        numOfChars++;
+
+                        System.out.println(" " + digraph[0] + "" + digraph[1] + " sub");
+                    } else {
+                        digraph[0] = ' ';
+                        System.out.println();
+                    }
+                }
+                numOfChars++;
+            }
+
+            fileInputStream.close();
+            if (!(numOfChars % 2 == 0)){
+                digraph[1] = 'x';
+                System.out.println(digraph[0] +""+ digraph[1]);
+            }
+
+            writeCipher.close();
+            System.out.println(numOfChars);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
