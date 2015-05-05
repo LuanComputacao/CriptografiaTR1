@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by luan on 28/04/15.
- *
+ * <p/>
  * Test base to Playfair class
  */
 public class PlayfairTest {
@@ -25,9 +25,9 @@ public class PlayfairTest {
             {'u', 'v', 'w', 'x', 'z'}
     };
     private char[][] matrizMaked;
-
-    private String inputFileName = "files/smallinput.in";
-    private String outputFileName = "files/smallout.out";
+    private String pathFiles = "/var/workspace/Mestrado/Criptografia/tr1/test/files/";
+    private String inputFileName = pathFiles + "smallinput.in";
+    private String outputFileName = pathFiles + "smallout.out";
     private String testoutputFileName = "files/testsmallout.out";
 
 
@@ -72,6 +72,7 @@ public class PlayfairTest {
 
     @Test
     public void cifraUmArquivoDeTexto() {
+
         this.playfair.cifraArquivoDeTexto(inputFileName, outputFileName);
     }
 }
