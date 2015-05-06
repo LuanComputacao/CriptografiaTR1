@@ -1,6 +1,9 @@
+import com.luancomputacao.Utils.HashGeneratorUtils;
 import com.luancomputacao.cifras.Playfair;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +31,7 @@ public class PlayfairTest {
     private String pathFiles = System.getProperty("user.dir")+ "/test/files/";
     private String inputFileName = pathFiles + "smallinput.in";
     private String outputFileName = pathFiles + "smallout.out";
-    private String testoutputFileName = "files/testsmallout.out";
+    private String testoutputFileName = pathFiles +"testsmallout.out";
 
 
     @Before
@@ -71,9 +74,8 @@ public class PlayfairTest {
     }
 
     @Test
-    public void cifraUmArquivoDeTexto() {
+    public void cifraUmArquivoDeTexto() throws HashGeneratorUtils.HashGenerationException {
         this.playfair.cifraArquivoDeTexto(inputFileName, outputFileName);
-
-//        assertEquals();
+        assertEquals(HashGeneratorUtils.fileGenerateMD5(new File(testoutputFileName)), HashGeneratorUtils.fileGenerateMD5(new File(outputFileName)));
     }
 }

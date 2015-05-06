@@ -1,5 +1,7 @@
 package com.luancomputacao.cifras;
 
+import com.luancomputacao.Utils.TextUtils;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -62,7 +64,12 @@ public class Playfair {
     }
 
     private void setTextoPreparado() {
-        String strTemp = this.clearText(this.getTextoClaro());
+
+        String strTemp = new TextUtils().clearText(this.getTextoClaro());
+
+        //une j e i (Regra de playfair)
+        strTemp = strTemp.replaceAll("j", "i");
+
         if ((strTemp.length() % 2) == 0) {
             strTemp += "x";
         }
@@ -173,28 +180,6 @@ public class Playfair {
         }
     }
 
-    private String clearText(String sClearText) {
-        sClearText = sClearText.toLowerCase();
-        //Espaços em branco
-        sClearText = sClearText.replaceAll("\\s", "");
-        //Converte caracteres especiais
-        sClearText = sClearText.replaceAll("[àÀáÁâÂãÃäÄÅå]", "a");
-        sClearText = sClearText.replaceAll("[èÈéÉêÊëË]", "e");
-        sClearText = sClearText.replaceAll("[ìÌíÍîÎïÏ]", "i");
-        sClearText = sClearText.replaceAll("[òÒóÓôÔõÕöÖ]", "o");
-        sClearText = sClearText.replaceAll("[ùÙÚúûÛüÜ]", "u");
-        sClearText = sClearText.replaceAll("[çÇ]", "c");
-        sClearText = sClearText.replaceAll("[ñÑ]", "n");
-        sClearText = sClearText.replaceAll("[ýÝÿŸ]", "y");
-        sClearText = sClearText.replaceAll("[ßØøÆæœ]", "x");
-        //une j e i (Regra de playfair)
-        sClearText = sClearText.replaceAll("j", "i");
-        //retira tudo que não é caractere
-        sClearText = sClearText.replaceAll("\\W", "");
-
-        return sClearText;
-    }
-
     private void separeteDoubleChar(String strTemp) {
         for (int i = 0; i < strTemp.length() - 1; i += 2) {
             if (strTemp.charAt(i) == strTemp.charAt(i + 1)) {
@@ -244,7 +229,7 @@ public class Playfair {
 
             //Faz a leitura das linhas, limpa o texto e grava em arquivo temporário
             while (scanner.hasNextLine()) {
-                text = clearText(scanner.nextLine());
+                text = new TextUtils().clearText(scanner.nextLine());
                 writer.write(text);
             }
             writer.close();
