@@ -27,9 +27,8 @@ public class Playfair {
     private List<Character> lstTextoPreparado = new ArrayList<>();
     private List<Character> lstTextoCifrado = new ArrayList<>();
     private String strTextoCifrado;
-    private boolean stream;
 
-    final static Charset ENCODING = StandardCharsets.UTF_8;
+    private final static Charset ENCODING = StandardCharsets.UTF_8;
     private long numOfChars = 0;
 
 
@@ -64,7 +63,7 @@ public class Playfair {
 
     private void setTextoPreparado() {
         String strTemp = this.clearText(this.getTextoClaro());
-        if (!stream) if ((strTemp.length() % 2) == 0) {
+        if ((strTemp.length() % 2) == 0) {
             strTemp += "x";
         }
         this.separeteDoubleChar(strTemp);
@@ -149,7 +148,7 @@ public class Playfair {
 
     public void cifrarTexto() {
         this.setTextoPreparado();
-        this.embaralhaCaracteres();
+        this.embaralhaStringTexto();
     }
 
     private void resetLsts() {
@@ -161,14 +160,14 @@ public class Playfair {
         this.resetLsts();
         this.setTextoClaro(textoClaro);
         this.setTextoPreparado();
-        this.embaralhaCaracteres();
+        this.embaralhaStringTexto();
         return this.getTextoCifrado();
     }
 
-    private void embaralhaCaracteres() {
+    private void embaralhaStringTexto() {
         String cipher;
         for (int i = 0; i < this.lstTextoPreparado.size(); i += 2) {
-            cipher = this.aplicaPlayfair(this.lstTextoPreparado.get(i).toString(), this.lstTextoPreparado.get(i + 1).toString());
+            cipher = this.trocaCaracteres(this.lstTextoPreparado.get(i).toString(), this.lstTextoPreparado.get(i + 1).toString());
             this.lstTextoCifrado.add(cipher.charAt(0));
             this.lstTextoCifrado.add(cipher.charAt(1));
         }
@@ -176,7 +175,9 @@ public class Playfair {
 
     private String clearText(String sClearText) {
         sClearText = sClearText.toLowerCase();
+        //Espaços em branco
         sClearText = sClearText.replaceAll("\\s", "");
+        //Converte caracteres especiais
         sClearText = sClearText.replaceAll("[àÀáÁâÂãÃäÄÅå]", "a");
         sClearText = sClearText.replaceAll("[èÈéÉêÊëË]", "e");
         sClearText = sClearText.replaceAll("[ìÌíÍîÎïÏ]", "i");
@@ -186,8 +187,11 @@ public class Playfair {
         sClearText = sClearText.replaceAll("[ñÑ]", "n");
         sClearText = sClearText.replaceAll("[ýÝÿŸ]", "y");
         sClearText = sClearText.replaceAll("[ßØøÆæœ]", "x");
+        //une j e i (Regra de playfair)
         sClearText = sClearText.replaceAll("j", "i");
+        //retira tudo que não é caractere
         sClearText = sClearText.replaceAll("\\W", "");
+
         return sClearText;
     }
 
@@ -204,7 +208,7 @@ public class Playfair {
         }
     }
 
-    private String aplicaPlayfair(String letra1, String letra2) {
+    private String trocaCaracteres(String letra1, String letra2) {
         int temp;
         int line1 = getLinePlayfair(letra1);
         int col1 = getColPlayfair(letra1);
@@ -234,8 +238,6 @@ public class Playfair {
         Path pathWriteTemp = Paths.get(outTempFile);
         Path pathWriteCipher = Paths.get(outputFileName);
         String text;
-
-
         try {
             BufferedWriter writer = Files.newBufferedWriter(pathWriteTemp, ENCODING);
             Scanner scanner = new Scanner(path, ENCODING.name());
@@ -243,7 +245,6 @@ public class Playfair {
             //Faz a leitura das linhas, limpa o texto e grava em arquivo temporário
             while (scanner.hasNextLine()) {
                 text = clearText(scanner.nextLine());
-                //System.out.print(text);
                 writer.write(text);
             }
             writer.close();
@@ -253,7 +254,6 @@ public class Playfair {
             int r;
             char[] digraph = new char[2];
             digraph[0] = ' ';
-            int numOfChars = 0;
             char tempC;
 
             BufferedWriter writeCipher = Files.newBufferedWriter(pathWriteCipher, ENCODING);
@@ -263,24 +263,14 @@ public class Playfair {
                     digraph[0] = c;
                 } else {
                     digraph[1] = c;
-                    System.out.print(digraph[0]);
-                    System.out.print(digraph[1]);
-
-
                     if (digraph[0] == digraph[1]) {
-                        System.out.print(" eq");
-
                         tempC = digraph[1];
                         digraph[1] = 'x';
-                        writeCipher.write(aplicaPlayfair(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
-
+                        writeCipher.write(trocaCaracteres(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
                         digraph[0] = tempC;
                         numOfChars++;
-
-                        System.out.println(" " + digraph[0] + "" + digraph[1] + " sub");
                     } else {
-                        System.out.println();
-                        writeCipher.write(aplicaPlayfair(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
+                        writeCipher.write(trocaCaracteres(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
                         digraph[0] = ' ';
                     }
                 }
@@ -289,15 +279,9 @@ public class Playfair {
 
             fileInputStream.close();
             if (!(numOfChars % 2 == 0)) {
-                digraph[1] = 'x';
-                System.out.println(digraph[0] + "" + digraph[1]);
-                writeCipher.write(aplicaPlayfair(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
+                writeCipher.write(trocaCaracteres(String.valueOf(digraph[0]), "x"));
             }
-
             writeCipher.close();
-            System.out.println(numOfChars);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
