@@ -73,5 +73,7 @@ public class PlayfairTest {
     @Test
     public void cifraUmArquivoDeTexto() {
         this.playfair.cifraArquivoDeTexto(inputFileName, outputFileName);
+
+//        assertEquals();
     }
 }

@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 /**
  * Created by luan on 27/04/15.
- * <p>
+ * <p/>
  * This class is to cipher a text with Playfair method
  */
 public class Playfair {
@@ -165,6 +165,15 @@ public class Playfair {
         return this.getTextoCifrado();
     }
 
+    private void embaralhaCaracteres() {
+        String cipher;
+        for (int i = 0; i < this.lstTextoPreparado.size(); i += 2) {
+            cipher = this.aplicaPlayfair(this.lstTextoPreparado.get(i).toString(), this.lstTextoPreparado.get(i + 1).toString());
+            this.lstTextoCifrado.add(cipher.charAt(0));
+            this.lstTextoCifrado.add(cipher.charAt(1));
+        }
+    }
+
     private String clearText(String sClearText) {
         sClearText = sClearText.toLowerCase();
         sClearText = sClearText.replaceAll("\\s", "");
@@ -195,37 +204,31 @@ public class Playfair {
         }
     }
 
-    private void embaralhaCaracteres() {
+    private String aplicaPlayfair(String letra1, String letra2) {
         int temp;
+        int line1 = getLinePlayfair(letra1);
+        int col1 = getColPlayfair(letra1);
 
-        for (int i = 0; i < this.lstTextoPreparado.size(); i += 2) {
+        int line2 = getLinePlayfair(letra2);
+        int col2 = getColPlayfair(letra2);
 
-            String letra1 = this.lstTextoPreparado.get(i).toString();
-            int line1 = getLinePlayfair(letra1);
-            int col1 = getColPlayfair(letra1);
-
-            String letra2 = this.lstTextoPreparado.get(i + 1).toString();
-            int line2 = getLinePlayfair(letra2);
-            int col2 = getColPlayfair(letra2);
-
-            if (line1 == line2) {
-                col1 = ++col1 % 5;
-                col2 = ++col2 % 5;
-            } else if (col1 == col2) {
-                line1 = ++line1 % 5;
-                line2 = ++line2 % 5;
-            } else {
-                temp = col1;
-                col1 = col2;
-                col2 = temp;
-            }
-            this.lstTextoCifrado.add(this.matriz[line1][col1]);
-            this.lstTextoCifrado.add(this.matriz[line2][col2]);
+        if (line1 == line2) {
+            col1 = ++col1 % 5;
+            col2 = ++col2 % 5;
+        } else if (col1 == col2) {
+            line1 = ++line1 % 5;
+            line2 = ++line2 % 5;
+        } else {
+            temp = col1;
+            col1 = col2;
+            col2 = temp;
         }
+        return this.matriz[line1][col1] + "" + this.matriz[line2][col2];
+
     }
 
     public void cifraArquivoDeTexto(String inputFileName, String outputFileName) {
-        String outTempFile = System.getProperty("java.io.tmpdir")+"/tmpPlayFairout.out";
+        String outTempFile = System.getProperty("java.io.tmpdir") + "/tmpPlayFairout.out";
 
         Path path = Paths.get(inputFileName);
         Path pathWriteTemp = Paths.get(outTempFile);
@@ -263,27 +266,32 @@ public class Playfair {
                     System.out.print(digraph[0]);
                     System.out.print(digraph[1]);
 
+
                     if (digraph[0] == digraph[1]) {
                         System.out.print(" eq");
 
                         tempC = digraph[1];
                         digraph[1] = 'x';
+                        writeCipher.write(aplicaPlayfair(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
+
                         digraph[0] = tempC;
                         numOfChars++;
 
                         System.out.println(" " + digraph[0] + "" + digraph[1] + " sub");
                     } else {
-                        digraph[0] = ' ';
                         System.out.println();
+                        writeCipher.write(aplicaPlayfair(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
+                        digraph[0] = ' ';
                     }
                 }
                 numOfChars++;
             }
 
             fileInputStream.close();
-            if (!(numOfChars % 2 == 0)){
+            if (!(numOfChars % 2 == 0)) {
                 digraph[1] = 'x';
-                System.out.println(digraph[0] +""+ digraph[1]);
+                System.out.println(digraph[0] + "" + digraph[1]);
+                writeCipher.write(aplicaPlayfair(String.valueOf(digraph[0]), String.valueOf(digraph[1])));
             }
 
             writeCipher.close();
