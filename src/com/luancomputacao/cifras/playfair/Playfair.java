@@ -1,4 +1,4 @@
-package com.luancomputacao.cifras;
+package com.luancomputacao.cifras.playfair;
 
 import com.luancomputacao.Utils.TextUtils;
 
@@ -224,6 +224,8 @@ public class Playfair {
         Path pathWriteCipher = Paths.get(outputFileName);
         String text;
         try {
+
+            //@Todo Create "public String clearTextOfFile(filePath){}" returning the path of temporary file with prefixing tmp in the name of input file
             BufferedWriter writer = Files.newBufferedWriter(pathWriteTemp, ENCODING);
             Scanner scanner = new Scanner(path, ENCODING.name());
 

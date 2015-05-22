@@ -1,5 +1,9 @@
 package com.luancomputacao.Utils;
 
+import java.io.FilenameFilter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Created by dev8 on 06/05/15.
  */
@@ -22,5 +26,14 @@ public class TextUtils {
         sClearText = sClearText.replaceAll("\\W", "");
 
         return sClearText;
+    }
+
+    public String clearTextOfFile(String filePath) {
+        Path pathIn = Paths.get(filePath);
+        String outTempFile = System.getProperty("java.io.tmpdir") + "/tmp" + pathIn.getFileName().toString();
+        System.out.print(outTempFile);
+        Path pathWriteTemp = Paths.get(outTempFile);
+
+        return outTempFile;
     }
 }

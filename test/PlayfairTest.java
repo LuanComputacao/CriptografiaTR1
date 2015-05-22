@@ -1,5 +1,5 @@
 import com.luancomputacao.Utils.HashGeneratorUtils;
-import com.luancomputacao.cifras.Playfair;
+import com.luancomputacao.cifras.playfair.Playfair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public class PlayfairTest {
     private char[][] matrizMaked;
     private String pathFiles = System.getProperty("user.dir")+ "/test/files/";
     private String inputFileName = pathFiles + "smallinput.in";
-    private String outputFileName = pathFiles + "smallout.out";
-    private String testoutputFileName = pathFiles +"testsmallout.out";
+    private String outputFileName = pathFiles + "smalloutPlayfair.out";
+    private String testoutputFileName = pathFiles + "testsmalloutPlayfair.out";
 
 
     @Before
